@@ -7,7 +7,6 @@ Uses NLTK and Spacy to parse documents, filter, and produce syntactic tokens
 import multiprocessing
 
 import spacy
-from joblib import Parallel, delayed
 
 from nlpkit.utils import do_or_load_json, file_to_lines
 from functools import partial
@@ -125,7 +124,6 @@ def tokenize(doc):
 def is_post_stop_words(word):
     predicates = [w for w in poststop_words if w == word]
     return len(predicates) > 0 or len(word) <= 1
-
 
 
 def transform_with_bigrams(tokenized_doc, bigrams, is_full_mapping=False, iteration_nbr=25):
@@ -246,7 +244,6 @@ def tokenify_words_with_mappings(words_with_grams, tokens, mappings):
     return result_tokens
 
 
-
 def bigrams_filter(doc_text_tokens, bigrams_with_stats, iteration_nbr=11):
     # we do the same as for tri-grams but with a file of bi-grams with stats
     doc_as_strings, mapping = transform_bigrams_with_stats(
@@ -323,7 +320,6 @@ def advanced_tokenize_doc(input_doc, bigrams_with_stats):
 
 # advanced : use collocation analysis
 def advanced_tokenize_corpus(original_dataset: list, bigrams_with_stats):
-
     stats = bigrams_stats_as_str(bigrams_with_stats)
 
     tokenization_results = [advanced_tokenize_doc(doc, stats) for doc in original_dataset]
@@ -367,30 +363,13 @@ def cached_or_tokenize_corpus(lazy_corpus, strategy_name="b",
         return corpus_as_pos_tokens
 
 
-def broadcast_lazy_tokenize_corpus(lazy_corpuses,
-                                   strategy_name="b",
-                                   strategy="basic",
-                                   should_overwrite=False,
-                                   base_path="./input/session/",
-                                   doc_filter=None
-                                   ):
-    names = ["%s_%s" % (lazy_corpus[0], strategy_name) for lazy_corpus in lazy_corpuses]
-    return [(names[i], partial(cached_or_tokenize_corpus,
-                               lazy_corpus[1],
-                               names[i],
-                               should_overwrite=should_overwrite,
-                               base_path=base_path,
-                               strategy=strategy,
-                               doc_filter=doc_filter))
-            for i, lazy_corpus in enumerate(lazy_corpuses)]
-
-
 def cached_or_tokenize_lazy_corpus(base_path="./input/session/", strategy='basic',
                                    strategy_name="b",
                                    doc_filter=None,
                                    raw=True,
-                                    cached_or_load_contents_fct=None):
-    return cached_or_tokenize_corpus(cached_or_load_contents_fct,
+                                   cached_or_load_contents_fct=None,
+                                   content_key="prepared_ind_contents"):
+    return cached_or_tokenize_corpus(partial(cached_or_load_contents_fct, content_key),
                                      strategy_name=strategy_name,
                                      strategy=strategy,
                                      base_path=base_path,

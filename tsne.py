@@ -17,9 +17,9 @@ def tsne_representation(documents_representation, metric, perplexity=30.):
                       init='random', metric=metric)
 
     # 20-D -> 2-D
-    tsne_lda = tsne_model.fit_transform(documents_representation)
+    tsne_2d = tsne_model.fit_transform(documents_representation)
 
-    x = tsne_lda[:, 0]
-    y = tsne_lda[:, 1]
+    x = tsne_2d[:, 0]
+    y = tsne_2d[:, 1]
 
     return x, y

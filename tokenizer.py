@@ -66,6 +66,11 @@ def with_composable_words(tokenized_doc):
             or x.pos_ == u"ADV"]
 
 
+def without_num_sym_words(tokenized_doc):
+    return [x for x in tokenized_doc
+            if x.pos_ != u"NUM"
+            and x.pos_ != u"SYM"]
+
 # articles : the, a, an
 # prepositions : above, before, except, from ...
 # conjonctions : and, or, but, so

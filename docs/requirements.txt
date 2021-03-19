@@ -19,7 +19,7 @@ gensim==3.4.0
 idna==2.6
 image==1.5.20
 imagesize==1.0.0
-Jinja2==2.10
+Jinja2==2.11.3
 jmespath==0.9.3
 joblib==0.11
 kiwisolver==1.0.1

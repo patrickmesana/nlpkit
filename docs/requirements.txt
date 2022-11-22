@@ -37,7 +37,7 @@ packaging==17.1
 pandas==0.22.0
 pathlib==1.0.1
 pbr==4.0.2
-Pillow==5.1.0
+Pillow==9.3.0
 plac==0.9.6
 pluggy==0.6.0
 preshed==1.0.0
